@@ -1,0 +1,5416 @@
+{
+  "accounts": [
+    {
+      "id": "acc_sample_1",
+      "platform": "Facebook",
+      "uid": "100089123456789",
+      "name": "Nguyen Van A",
+      "password": "SamplePassword123!",
+      "twoFactorSecret": "JBSWY3DPEHPK3PXP",
+      "email": "sample_fb1@gmail.com",
+      "emailPassword": "app_password_987",
+      "assignedDevice": "",
+      "status": "Live",
+      "createdAt": "2026-11-04T17:44:40.612Z",
+      "updatedAt": "2026-11-04T17:44:40.612Z"
+    },
+    {
+      "id": "acc_sample_2",
+      "platform": "Threads",
+      "uid": "threads_user_sample",
+      "name": "Tran Thi B",
+      "password": "SamplePassword456@",
+      "twoFactorSecret": "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ",
+      "email": "sample_threads@outlook.com",
+      "emailPassword": "app_password_654",
+      "assignedDevice": "",
+      "status": "Live",
+      "createdAt": "2026-11-04T17:44:40.612Z",
+      "updatedAt": "2026-11-04T17:44:40.612Z"
+    }
+  ],
+  "savedFlows": [
+    {
+      "id": "flow_nuoi_fb_smart_loop",
+      "name": "Facebook: Nuôi Nick Thông Minh (Lướt Feed 3 - 5 Phút)",
+      "description": "Vòng lặp 20 chu kỳ lướt Feed thông minh (3 - 5 phút), đọc bài tự nhiên 5-10s, thả cảm xúc ngẫu nhiên 25%, tự động hồi phục khi dính popup hoặc quảng cáo.",
+      "version": "2.1.0",
+      "flow": {
+        "nodes": [
+          {
+            "id": "start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 140
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "pause_wake",
+            "type": "default",
+            "label": "Chờ mở khoá 2s",
+            "position": {
+              "x": 300,
+              "y": 230
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở khoá 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 320
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "pause_load",
+            "type": "default",
+            "label": "Chờ nạp Bảng tin 5s",
+            "position": {
+              "x": 300,
+              "y": 410
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Bảng tin 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "loop_warmup",
+            "type": "default",
+            "label": "Vòng lặp Feed (20 lượt)",
+            "position": {
+              "x": 300,
+              "y": 500
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp Feed (20 lượt)",
+              "options": {
+                "count": "20",
+                "loopId": "fb_feed_warmup_20",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "auto_recovery",
+              "failNode": "press_home"
+            }
+          },
+          {
+            "id": "auto_recovery",
+            "type": "default",
+            "label": "Bảo Vệ & Chống Kẹt Màn Hình",
+            "position": {
+              "x": 300,
+              "y": 590
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo Vệ & Chống Kẹt Màn Hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "swipe_safe",
+            "type": "default",
+            "label": "Cuộn Feed An Toàn (750ms)",
+            "position": {
+              "x": 300,
+              "y": 680
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn Feed An Toàn (750ms)",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "feed_interact",
+            "type": "default",
+            "label": "Tương tác Feed ngẫu nhiên (25%)",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "FbFeedInteract",
+              "label": "Tương tác Feed ngẫu nhiên (25%)",
+              "options": {
+                "likeRate": "0.25",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "pause_reading",
+            "type": "default",
+            "label": "Dừng đọc ngẫu nhiên (5-10s)",
+            "position": {
+              "x": 300,
+              "y": 860
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng đọc ngẫu nhiên (5-10s)",
+              "options": {
+                "minTime": "5",
+                "maxTime": "10",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "press_home",
+            "type": "default",
+            "label": "Nhấn Home",
+            "position": {
+              "x": 550,
+              "y": 500
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Nhấn Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "pause_exit",
+            "type": "default",
+            "label": "Chờ thoát 2s",
+            "position": {
+              "x": 550,
+              "y": 590
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ thoát 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "stop_app",
+            "type": "default",
+            "label": "Đóng Facebook katana",
+            "position": {
+              "x": 550,
+              "y": 680
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook katana",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "stop",
+            "type": "output",
+            "label": "Hoàn tất",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn tất",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_start_wake_successNode",
+            "source": "start",
+            "target": "wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_wake_pause_wake_successNode",
+            "source": "wake",
+            "target": "pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_pause_wake_open_fb_successNode",
+            "source": "pause_wake",
+            "target": "open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_open_fb_pause_load_successNode",
+            "source": "open_fb",
+            "target": "pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_pause_load_loop_warmup_successNode",
+            "source": "pause_load",
+            "target": "loop_warmup",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_loop_warmup_auto_recovery_successNode",
+            "source": "loop_warmup",
+            "target": "auto_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_auto_recovery_swipe_safe_successNode",
+            "source": "auto_recovery",
+            "target": "swipe_safe",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_swipe_safe_feed_interact_successNode",
+            "source": "swipe_safe",
+            "target": "feed_interact",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_feed_interact_pause_reading_successNode",
+            "source": "feed_interact",
+            "target": "pause_reading",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_pause_reading_loop_warmup_successNode",
+            "source": "pause_reading",
+            "target": "loop_warmup",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_loop_warmup_press_home_failNode",
+            "source": "loop_warmup",
+            "target": "press_home",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_press_home_pause_exit_successNode",
+            "source": "press_home",
+            "target": "pause_exit",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_pause_exit_stop_app_successNode",
+            "source": "pause_exit",
+            "target": "stop_app",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_stop_app_stop_successNode",
+            "source": "stop_app",
+            "target": "stop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-10-31T15:18:22.124Z",
+      "updatedAt": "2026-10-31T15:18:22.124Z",
+      "platform": "facebook",
+      "category": "nuoi_nick",
+      "categoryLabel": "Nuôi Tương Tác",
+      "nodeCount": 14,
+      "edgeCount": 14
+    },
+    {
+      "id": "flow_threads_tieng_trung_hanpeak_ai",
+      "name": "Threads: AI Quét Bài & Bình Luận Hanpeak (37 Bước - Full Edge Cases Guard)",
+      "description": "Flow tự động tìm kiếm từ khóa, quét bài viết sạch (loại bỏ link ngoài, bài tắt cmt), tự phục hồi nếu dính browser hijack hoặc trang cá nhân, mở composer có kiểm tra và xác thực bình luận thực tế chống Meta chặn.",
+      "version": "2.0.0",
+      "flow": {
+        "nodes": [
+          {
+            "id": "n_start",
+            "type": "input",
+            "position": {
+              "x": 50,
+              "y": 150
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "successNode": "n_wake"
+            }
+          },
+          {
+            "id": "n_wake",
+            "type": "custom",
+            "position": {
+              "x": 220,
+              "y": 150
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "successNode": "n_pause_wake"
+            }
+          },
+          {
+            "id": "n_pause_wake",
+            "type": "custom",
+            "position": {
+              "x": 390,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 1s",
+              "options": {
+                "timePause": "1"
+              },
+              "successNode": "n_kill_threads_before"
+            }
+          },
+          {
+            "id": "n_kill_threads_before",
+            "type": "custom",
+            "position": {
+              "x": 560,
+              "y": 150
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Threads cũ (reset phiên)",
+              "options": {
+                "packageName": "com.instagram.barcelona",
+                "instant": true
+              },
+              "successNode": "n_pause_after_kill"
+            }
+          },
+          {
+            "id": "n_pause_after_kill",
+            "type": "custom",
+            "position": {
+              "x": 730,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 1.5s",
+              "options": {
+                "timePause": "1.5"
+              },
+              "successNode": "n_open_threads"
+            }
+          },
+          {
+            "id": "n_open_threads",
+            "type": "custom",
+            "position": {
+              "x": 900,
+              "y": 150
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Threads App",
+              "options": {
+                "packageName": "com.instagram.barcelona"
+              },
+              "successNode": "n_pause_load"
+            }
+          },
+          {
+            "id": "n_pause_load",
+            "type": "custom",
+            "position": {
+              "x": 1070,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Threads 6s",
+              "options": {
+                "timePause": "6"
+              },
+              "successNode": "n_recovery_1"
+            }
+          },
+          {
+            "id": "n_recovery_1",
+            "type": "custom",
+            "position": {
+              "x": 1240,
+              "y": 150
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "successNode": "n_dismiss_popups_start",
+              "options": {
+                "targetPackage": "com.instagram.barcelona"
+              }
+            }
+          },
+          {
+            "id": "n_dismiss_popups_start",
+            "type": "custom",
+            "position": {
+              "x": 1410,
+              "y": 150
+            },
+            "data": {
+              "label": "Đóng Popup / Thông báo",
+              "action": "DismissPopups",
+              "options": {},
+              "successNode": "n_tap_search"
+            }
+          },
+          {
+            "id": "n_tap_search",
+            "type": "custom",
+            "position": {
+              "x": 1580,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm icon Tìm kiếm",
+              "options": {
+                "selector": "main_feed_search_button|action_bar_search_button|Search|Tìm kiếm",
+                "touchX": 664,
+                "touchY": 125
+              },
+              "successNode": "n_pause_search"
+            }
+          },
+          {
+            "id": "n_pause_search",
+            "type": "custom",
+            "position": {
+              "x": 1750,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở ô Search 2s",
+              "options": {
+                "timePause": "2.5"
+              },
+              "successNode": "n_focus_input"
+            }
+          },
+          {
+            "id": "n_focus_input",
+            "type": "custom",
+            "position": {
+              "x": 1920,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Focus ô Search",
+              "options": {
+                "selector": "BdsSearchBarInput|search_bar_edit_text|BdsSearchBar|Tìm kiếm|Search",
+                "touchX": 344,
+                "touchY": 232
+              },
+              "successNode": "n_select_keyword"
+            }
+          },
+          {
+            "id": "n_select_keyword",
+            "type": "custom",
+            "position": {
+              "x": 2090,
+              "y": 150
+            },
+            "data": {
+              "action": "SelectKeyword",
+              "label": "Chọn từ khóa theo Persona",
+              "options": {
+                "category": "persona"
+              },
+              "successNode": "n_type_keyword"
+            }
+          },
+          {
+            "id": "n_type_keyword",
+            "type": "custom",
+            "position": {
+              "x": 2260,
+              "y": 150
+            },
+            "data": {
+              "action": "TypeText",
+              "label": "Gõ từ khóa: ",
+              "options": {
+                "text": "${SearchKeyword}"
+              },
+              "successNode": "n_press_enter"
+            }
+          },
+          {
+            "id": "n_press_enter",
+            "type": "custom",
+            "position": {
+              "x": 2430,
+              "y": 150
+            },
+            "data": {
+              "action": "Adb",
+              "label": "Bấm Enter tìm kiếm",
+              "options": {
+                "command": "input keyevent 66"
+              },
+              "successNode": "n_pause_results"
+            }
+          },
+          {
+            "id": "n_pause_results",
+            "type": "custom",
+            "position": {
+              "x": 2600,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp kết quả 4s",
+              "options": {
+                "timePause": "4"
+              },
+              "successNode": "n_swipe_posts"
+            }
+          },
+          {
+            "id": "n_swipe_posts",
+            "type": "custom",
+            "position": {
+              "x": 2770,
+              "y": 150
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn lướt xuống xem bài",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750"
+              },
+              "successNode": "n_pause_read"
+            }
+          },
+          {
+            "id": "n_pause_read",
+            "type": "custom",
+            "position": {
+              "x": 2940,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng đọc bài 4s",
+              "options": {
+                "minTime": "3",
+                "maxTime": "6"
+              },
+              "successNode": "n_extract_post"
+            }
+          },
+          {
+            "id": "n_extract_post",
+            "type": "custom",
+            "position": {
+              "x": 3110,
+              "y": 150
+            },
+            "data": {
+              "action": "ExtractPostContent",
+              "label": "AI Quét nội dung bài",
+              "successNode": "n_ai_generate"
+            }
+          },
+          {
+            "id": "n_ai_generate",
+            "type": "custom",
+            "position": {
+              "x": 3280,
+              "y": 150
+            },
+            "data": {
+              "action": "AiGenerateComment",
+              "label": "AI Biên bình luận Hanpeak",
+              "successNode": "n_open_post_detail"
+            }
+          },
+          {
+            "id": "n_open_post_detail",
+            "type": "custom",
+            "position": {
+              "x": 3450,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Mở chi tiết bài viết",
+              "options": {
+                "touchX": "${PostX}",
+                "touchY": "${PostY}"
+              },
+              "successNode": "n_pause_detail"
+            }
+          },
+          {
+            "id": "n_pause_detail",
+            "type": "custom",
+            "position": {
+              "x": 3620,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp bài 3s",
+              "options": {
+                "timePause": "3"
+              },
+              "successNode": "n_ensure_post_detail"
+            }
+          },
+          {
+            "id": "n_ensure_post_detail",
+            "type": "custom",
+            "position": {
+              "x": 3790,
+              "y": 150
+            },
+            "data": {
+              "label": "Bảo vệ: Kiểm tra chi tiết bài (Chống dính link/khóa cmt)",
+              "action": "EnsurePostDetail",
+              "options": {},
+              "successNode": "n_like_post",
+              "failNode": "n_press_back"
+            }
+          },
+          {
+            "id": "n_like_post",
+            "type": "custom",
+            "position": {
+              "x": 3960,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Thả tim bài viết (Like)",
+              "options": {
+                "selector": "feed_post_ufi_like_button|Thích|Like",
+                "touchX": 70,
+                "touchY": 1078
+              },
+              "successNode": "n_pause_before_comment"
+            }
+          },
+          {
+            "id": "n_pause_before_comment",
+            "type": "custom",
+            "position": {
+              "x": 4130,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_tap_reply_bar"
+            }
+          },
+          {
+            "id": "n_tap_reply_bar",
+            "type": "custom",
+            "position": {
+              "x": 4300,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm ô Trả lời",
+              "options": {
+                "selector": "permalink_inline_composer|feed_post_ufi_reply_button|Trả lời|Reply",
+                "touchX": 209,
+                "touchY": 1078
+              },
+              "successNode": "n_pause_composer"
+            }
+          },
+          {
+            "id": "n_pause_composer",
+            "type": "custom",
+            "position": {
+              "x": 4470,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở ô nhập 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_ensure_composer"
+            }
+          },
+          {
+            "id": "n_ensure_composer",
+            "type": "custom",
+            "position": {
+              "x": 4640,
+              "y": 150
+            },
+            "data": {
+              "label": "Bảo vệ: Xác nhận mở khung nhập bình luận",
+              "action": "EnsureComposerOpen",
+              "options": {},
+              "successNode": "n_type_ai_comment",
+              "failNode": "n_press_back"
+            }
+          },
+          {
+            "id": "n_type_ai_comment",
+            "type": "custom",
+            "position": {
+              "x": 4810,
+              "y": 150
+            },
+            "data": {
+              "action": "TypeText",
+              "label": "Gõ bình luận AI",
+              "options": {
+                "text": "${AiComment}"
+              },
+              "successNode": "n_pause_review"
+            }
+          },
+          {
+            "id": "n_pause_review",
+            "type": "custom",
+            "position": {
+              "x": 4980,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng kiểm tra bình luận 4s",
+              "options": {
+                "timePause": "4"
+              },
+              "successNode": "n_tap_post_button"
+            }
+          },
+          {
+            "id": "n_tap_post_button",
+            "type": "custom",
+            "position": {
+              "x": 5150,
+              "y": 150
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm nút Đăng bình luận",
+              "options": {
+                "selector": "new_thread_screen_post_button|permalink_inline_composer_post_button|Đăng|Post",
+                "touchX": 628,
+                "touchY": 938
+              },
+              "successNode": "n_verify_posted"
+            }
+          },
+          {
+            "id": "n_verify_posted",
+            "type": "custom",
+            "position": {
+              "x": 5320,
+              "y": 150
+            },
+            "data": {
+              "label": "Xác thực bình luận & Chống Meta chặn",
+              "action": "VerifyCommentPosted",
+              "options": {},
+              "successNode": "n_press_back"
+            }
+          },
+          {
+            "id": "n_press_back",
+            "type": "custom",
+            "position": {
+              "x": 5490,
+              "y": 150
+            },
+            "data": {
+              "action": "PressBack",
+              "label": "Quay lại danh sách",
+              "successNode": "n_pause_exit"
+            }
+          },
+          {
+            "id": "n_pause_exit",
+            "type": "custom",
+            "position": {
+              "x": 5660,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ thoát an toàn 3.5s",
+              "options": {
+                "timePause": "3.5"
+              },
+              "successNode": "n_press_home"
+            }
+          },
+          {
+            "id": "n_press_home",
+            "type": "custom",
+            "position": {
+              "x": 5830,
+              "y": 150
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về màn hình Home",
+              "successNode": "n_stop_threads"
+            }
+          },
+          {
+            "id": "n_stop_threads",
+            "type": "custom",
+            "position": {
+              "x": 6000,
+              "y": 150
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ hoàn tất tác vụ nền 4s",
+              "options": {
+                "timePause": "4"
+              },
+              "successNode": "n_finish"
+            }
+          },
+          {
+            "id": "n_finish",
+            "type": "custom",
+            "position": {
+              "x": 6170,
+              "y": 150
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_1",
+            "source": "n_start",
+            "target": "n_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_2",
+            "source": "n_wake",
+            "target": "n_pause_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_3",
+            "source": "n_pause_wake",
+            "target": "n_kill_threads_before",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_4",
+            "source": "n_kill_threads_before",
+            "target": "n_pause_after_kill",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_5",
+            "source": "n_pause_after_kill",
+            "target": "n_open_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_6",
+            "source": "n_open_threads",
+            "target": "n_pause_load",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_7",
+            "source": "n_pause_load",
+            "target": "n_recovery_1",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_8",
+            "source": "n_recovery_1",
+            "target": "n_dismiss_popups_start",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_9",
+            "source": "n_dismiss_popups_start",
+            "target": "n_tap_search",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_10",
+            "source": "n_tap_search",
+            "target": "n_pause_search",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_11",
+            "source": "n_pause_search",
+            "target": "n_focus_input",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_12",
+            "source": "n_focus_input",
+            "target": "n_select_keyword",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_13",
+            "source": "n_select_keyword",
+            "target": "n_type_keyword",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_14",
+            "source": "n_type_keyword",
+            "target": "n_press_enter",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_15",
+            "source": "n_press_enter",
+            "target": "n_pause_results",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_16",
+            "source": "n_pause_results",
+            "target": "n_swipe_posts",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_17",
+            "source": "n_swipe_posts",
+            "target": "n_pause_read",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_18",
+            "source": "n_pause_read",
+            "target": "n_extract_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_19",
+            "source": "n_extract_post",
+            "target": "n_ai_generate",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_20",
+            "source": "n_ai_generate",
+            "target": "n_open_post_detail",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_21",
+            "source": "n_open_post_detail",
+            "target": "n_pause_detail",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_22",
+            "source": "n_pause_detail",
+            "target": "n_ensure_post_detail",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_23",
+            "source": "n_ensure_post_detail",
+            "target": "n_like_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_24",
+            "source": "n_like_post",
+            "target": "n_pause_before_comment",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_25",
+            "source": "n_pause_before_comment",
+            "target": "n_tap_reply_bar",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_26",
+            "source": "n_tap_reply_bar",
+            "target": "n_pause_composer",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_27",
+            "source": "n_pause_composer",
+            "target": "n_ensure_composer",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_28",
+            "source": "n_ensure_composer",
+            "target": "n_type_ai_comment",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_29",
+            "source": "n_type_ai_comment",
+            "target": "n_pause_review",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_30",
+            "source": "n_pause_review",
+            "target": "n_tap_post_button",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_31",
+            "source": "n_tap_post_button",
+            "target": "n_verify_posted",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_32",
+            "source": "n_verify_posted",
+            "target": "n_press_back",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_33",
+            "source": "n_press_back",
+            "target": "n_pause_exit",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_34",
+            "source": "n_pause_exit",
+            "target": "n_press_home",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_35",
+            "source": "n_press_home",
+            "target": "n_stop_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_36",
+            "source": "n_stop_threads",
+            "target": "n_finish",
+            "sourceHandle": "successNode"
+          }
+        ]
+      },
+      "createdAt": "2026-10-31T18:39:40.661Z",
+      "updatedAt": "2026-11-03T09:19:15.300Z",
+      "nodeCount": 37,
+      "edgeCount": 36,
+      "platform": "threads",
+      "category": "seeding",
+      "categoryLabel": "AI Seeding Hanpeak"
+    },
+    {
+      "id": "flow_threads_nuoi_nick_tu_nhien",
+      "name": "Threads: Nuôi Tương Tác Tự Nhiên (Lướt Feed 3 - 5 Phút)",
+      "description": "Lướt bảng tin Threads 18 lượt (3 - 5 phút), dwell time ngẫu nhiên 4-8s, thả tim bài viết tăng trust.",
+      "version": "1.0.0",
+      "createdAt": "2026-11-02T05:10:47.936Z",
+      "updatedAt": "2026-11-02T05:10:47.937Z",
+      "nodeCount": 20,
+      "edgeCount": 20,
+      "flow": {
+        "nodes": [
+          {
+            "id": "n_start",
+            "type": "input",
+            "position": {
+              "x": 50,
+              "y": 180
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "successNode": "n_wake"
+            }
+          },
+          {
+            "id": "n_wake",
+            "type": "custom",
+            "position": {
+              "x": 260,
+              "y": 180
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình & Mở khóa",
+              "successNode": "n_pause_wake"
+            }
+          },
+          {
+            "id": "n_pause_wake",
+            "type": "custom",
+            "position": {
+              "x": 470,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở khóa 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_open_threads"
+            }
+          },
+          {
+            "id": "n_open_threads",
+            "type": "custom",
+            "position": {
+              "x": 680,
+              "y": 180
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Threads App",
+              "options": {
+                "packageName": "com.instagram.barcelona"
+              },
+              "successNode": "n_pause_load"
+            }
+          },
+          {
+            "id": "n_pause_load",
+            "type": "custom",
+            "position": {
+              "x": 890,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Threads 6s",
+              "options": {
+                "timePause": "6"
+              },
+              "successNode": "n_recovery_init"
+            }
+          },
+          {
+            "id": "n_recovery_init",
+            "type": "custom",
+            "position": {
+              "x": 1100,
+              "y": 180
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình an toàn",
+              "options": {
+                "targetPackage": "com.instagram.barcelona"
+              },
+              "successNode": "n_ensure_feed"
+            }
+          },
+          {
+            "id": "n_ensure_feed",
+            "type": "custom",
+            "position": {
+              "x": 1310,
+              "y": 180
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Về Tab Feed chính",
+              "options": {
+                "touchX": 98,
+                "touchY": 1424,
+                "selector": "barcelona_tab_main_feed"
+              },
+              "successNode": "n_pause_feed"
+            }
+          },
+          {
+            "id": "n_pause_feed",
+            "type": "custom",
+            "position": {
+              "x": 1520,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ tải Feed 3s",
+              "options": {
+                "timePause": "3"
+              },
+              "successNode": "n_pull_refresh"
+            }
+          },
+          {
+            "id": "n_pull_refresh",
+            "type": "custom",
+            "position": {
+              "x": 1730,
+              "y": 180
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Kéo làm mới Newfeed",
+              "options": {
+                "swipeDirection": "down",
+                "swipeTime": "850"
+              },
+              "successNode": "n_pause_refreshed"
+            }
+          },
+          {
+            "id": "n_pause_refreshed",
+            "type": "custom",
+            "position": {
+              "x": 1940,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ bảng tin mới 4s",
+              "options": {
+                "timePause": "4"
+              },
+              "successNode": "n_loop_feed"
+            }
+          },
+          {
+            "id": "n_loop_feed",
+            "type": "custom",
+            "position": {
+              "x": 2150,
+              "y": 180
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp Feed (18 lượt)",
+              "options": {
+                "count": "18",
+                "loopId": "threads_feed_warmup_25"
+              },
+              "successNode": "n_recovery_loop",
+              "failNode": "n_press_home"
+            },
+            "label": "Vòng lặp Feed (18 lượt)"
+          },
+          {
+            "id": "n_recovery_loop",
+            "type": "custom",
+            "position": {
+              "x": 2370,
+              "y": 180
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Khiên AutoRecovery",
+              "options": {
+                "targetPackage": "com.instagram.barcelona"
+              },
+              "successNode": "n_swipe_feed"
+            }
+          },
+          {
+            "id": "n_swipe_feed",
+            "type": "custom",
+            "position": {
+              "x": 2590,
+              "y": 180
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn Feed tự nhiên (Jitter)",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750"
+              },
+              "successNode": "n_pause_read"
+            }
+          },
+          {
+            "id": "n_pause_read",
+            "type": "custom",
+            "position": {
+              "x": 2810,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng đọc bài ngẫu nhiên (4-9s)",
+              "options": {
+                "minTime": "4",
+                "maxTime": "9"
+              },
+              "successNode": "n_smart_interact"
+            }
+          },
+          {
+            "id": "n_smart_interact",
+            "type": "custom",
+            "position": {
+              "x": 3030,
+              "y": 180
+            },
+            "data": {
+              "action": "ThreadsFeedInteract",
+              "label": "Tương tác người thật (Like/Cmt)",
+              "options": {
+                "likeRate": "0.35",
+                "detailRate": "0.15"
+              },
+              "successNode": "n_pause_after"
+            }
+          },
+          {
+            "id": "n_pause_after",
+            "type": "custom",
+            "position": {
+              "x": 3250,
+              "y": 180
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Nghỉ tự nhiên 2s",
+              "options": {
+                "minTime": "2",
+                "maxTime": "4"
+              },
+              "successNode": "n_loop_feed"
+            }
+          },
+          {
+            "id": "n_press_home",
+            "type": "custom",
+            "position": {
+              "x": 2150,
+              "y": 380
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về màn hình Home",
+              "successNode": "n_pause_exit"
+            }
+          },
+          {
+            "id": "n_pause_exit",
+            "type": "custom",
+            "position": {
+              "x": 2370,
+              "y": 380
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ thoát 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_stop_threads"
+            }
+          },
+          {
+            "id": "n_stop_threads",
+            "type": "custom",
+            "position": {
+              "x": 2590,
+              "y": 380
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Threads giải phóng RAM",
+              "options": {
+                "packageName": "com.instagram.barcelona"
+              },
+              "successNode": "n_finish"
+            }
+          },
+          {
+            "id": "n_finish",
+            "type": "custom",
+            "position": {
+              "x": 2810,
+              "y": 380
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành phiên nuôi"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e1",
+            "source": "n_start",
+            "target": "n_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e2",
+            "source": "n_wake",
+            "target": "n_pause_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e3",
+            "source": "n_pause_wake",
+            "target": "n_open_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e4",
+            "source": "n_open_threads",
+            "target": "n_pause_load",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e5",
+            "source": "n_pause_load",
+            "target": "n_recovery_init",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e6",
+            "source": "n_recovery_init",
+            "target": "n_ensure_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e7",
+            "source": "n_ensure_feed",
+            "target": "n_pause_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e8",
+            "source": "n_pause_feed",
+            "target": "n_pull_refresh",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e9",
+            "source": "n_pull_refresh",
+            "target": "n_pause_refreshed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e10",
+            "source": "n_pause_refreshed",
+            "target": "n_loop_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_loop_in",
+            "source": "n_loop_feed",
+            "target": "n_recovery_loop",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_rec_swipe",
+            "source": "n_recovery_loop",
+            "target": "n_swipe_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_swipe_pause",
+            "source": "n_swipe_feed",
+            "target": "n_pause_read",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_pause_interact",
+            "source": "n_pause_read",
+            "target": "n_smart_interact",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_int_after",
+            "source": "n_smart_interact",
+            "target": "n_pause_after",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_pause_back_loop",
+            "source": "n_pause_after",
+            "target": "n_loop_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_loop_exit",
+            "source": "n_loop_feed",
+            "target": "n_press_home",
+            "sourceHandle": "failNode"
+          },
+          {
+            "id": "e_home_exit",
+            "source": "n_press_home",
+            "target": "n_pause_exit",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_exit_stop",
+            "source": "n_pause_exit",
+            "target": "n_stop_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_stop_finish",
+            "source": "n_stop_threads",
+            "target": "n_finish",
+            "sourceHandle": "successNode"
+          }
+        ]
+      },
+      "platform": "threads",
+      "category": "nuoi_nick",
+      "categoryLabel": "Nuôi Tương Tác"
+    },
+    {
+      "id": "flow_threads_dang_bai_tu_dong",
+      "name": "Threads: AI Tự Động Soạn & Đăng Bài Mới",
+      "description": "AI tạo nội dung và ảnh Meme Gen Z trước, import vào máy, sau đó mở Threads soạn và đăng bài viết kèm ảnh.",
+      "version": "1.0.0",
+      "createdAt": "2026-11-02T17:29:07.501Z",
+      "updatedAt": "2026-11-03T11:48:03.751Z",
+      "nodeCount": 26,
+      "edgeCount": 26,
+      "flow": {
+        "nodes": [
+          {
+            "id": "n_start",
+            "type": "input",
+            "position": {
+              "x": 50,
+              "y": 200
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "successNode": "n_wake"
+            }
+          },
+          {
+            "id": "n_wake",
+            "type": "custom",
+            "position": {
+              "x": 260,
+              "y": 200
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình & Mở khóa",
+              "successNode": "n_pause_wake"
+            }
+          },
+          {
+            "id": "n_pause_wake",
+            "type": "custom",
+            "position": {
+              "x": 470,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở khóa 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_ai_generate_post"
+            }
+          },
+          {
+            "id": "n_ai_generate_post",
+            "type": "custom",
+            "position": {
+              "x": 680,
+              "y": 200
+            },
+            "data": {
+              "action": "AiGeneratePost",
+              "label": "AI Soạn bài theo Persona",
+              "options": {},
+              "successNode": "n_prepare_meme"
+            }
+          },
+          {
+            "id": "n_prepare_meme",
+            "type": "custom",
+            "position": {
+              "x": 890,
+              "y": 200
+            },
+            "data": {
+              "action": "PrepareMemeImage",
+              "label": "Tạo ảnh Meme Gen Z & Push vào máy",
+              "options": {},
+              "successNode": "n_pause_after_import"
+            }
+          },
+          {
+            "id": "n_pause_after_import",
+            "type": "custom",
+            "position": {
+              "x": 1100,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ Android index ảnh 2.5s",
+              "options": {
+                "timePause": "2.5"
+              },
+              "successNode": "n_open_threads"
+            }
+          },
+          {
+            "id": "n_open_threads",
+            "type": "custom",
+            "position": {
+              "x": 1310,
+              "y": 200
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Threads App",
+              "options": {
+                "packageName": "com.instagram.barcelona"
+              },
+              "successNode": "n_pause_load"
+            }
+          },
+          {
+            "id": "n_pause_load",
+            "type": "custom",
+            "position": {
+              "x": 1520,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Threads 6s",
+              "options": {
+                "timePause": "6"
+              },
+              "successNode": "n_recovery_1"
+            }
+          },
+          {
+            "id": "n_recovery_1",
+            "type": "custom",
+            "position": {
+              "x": 1730,
+              "y": 200
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.instagram.barcelona"
+              },
+              "successNode": "n_ensure_feed"
+            }
+          },
+          {
+            "id": "n_ensure_feed",
+            "type": "custom",
+            "position": {
+              "x": 1940,
+              "y": 200
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Về Tab Feed chính",
+              "options": {
+                "touchX": 98,
+                "touchY": 1424,
+                "selector": "barcelona_tab_main_feed"
+              },
+              "successNode": "n_pause_feed"
+            }
+          },
+          {
+            "id": "n_pause_feed",
+            "type": "custom",
+            "position": {
+              "x": 2150,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Feed 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_tap_create"
+            }
+          },
+          {
+            "id": "n_tap_create",
+            "type": "custom",
+            "position": {
+              "x": 2360,
+              "y": 200
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm Tạo bài mới (+)",
+              "options": {
+                "touchX": 361,
+                "touchY": 1424,
+                "selector": "barcelona_tab_create"
+              },
+              "successNode": "n_pause_composer"
+            }
+          },
+          {
+            "id": "n_pause_composer",
+            "type": "custom",
+            "position": {
+              "x": 2570,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ mở ô soạn 2.5s",
+              "options": {
+                "timePause": "2.5"
+              },
+              "successNode": "n_attach_meme"
+            }
+          },
+          {
+            "id": "n_attach_meme",
+            "type": "custom",
+            "position": {
+              "x": 2780,
+              "y": 200
+            },
+            "data": {
+              "action": "AttachMemeImage",
+              "label": "Đính kèm ảnh Meme vào Thread",
+              "options": {},
+              "successNode": "n_pause_after_attach"
+            }
+          },
+          {
+            "id": "n_pause_after_attach",
+            "type": "custom",
+            "position": {
+              "x": 2990,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp ảnh vào bài 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_focus_input"
+            }
+          },
+          {
+            "id": "n_focus_input",
+            "type": "custom",
+            "position": {
+              "x": 3200,
+              "y": 200
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Focus ô Có gì mới?",
+              "options": {
+                "touchX": 404,
+                "touchY": 272,
+                "selector": "Có gì mới?|new_thread_screen_composer"
+              },
+              "successNode": "n_pause_focus"
+            }
+          },
+          {
+            "id": "n_pause_focus",
+            "type": "custom",
+            "position": {
+              "x": 3410,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ bàn phím 1s",
+              "options": {
+                "timePause": "1"
+              },
+              "successNode": "n_type_post"
+            }
+          },
+          {
+            "id": "n_type_post",
+            "type": "custom",
+            "position": {
+              "x": 3620,
+              "y": 200
+            },
+            "data": {
+              "action": "TypeText",
+              "label": "Gõ nội dung bài viết",
+              "options": {
+                "text": ""
+              },
+              "successNode": "n_pause_review"
+            }
+          },
+          {
+            "id": "n_pause_review",
+            "type": "custom",
+            "position": {
+              "x": 3830,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng xem lại bài 3s",
+              "options": {
+                "timePause": "3"
+              },
+              "successNode": "n_tap_post"
+            }
+          },
+          {
+            "id": "n_tap_post",
+            "type": "custom",
+            "position": {
+              "x": 4040,
+              "y": 200
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm nút Đăng Thread",
+              "options": {
+                "touchX": 628,
+                "touchY": 938,
+                "selector": "new_thread_screen_post_button|Đăng|Post"
+              },
+              "successNode": "n_verify_post"
+            }
+          },
+          {
+            "id": "n_verify_post",
+            "type": "custom",
+            "position": {
+              "x": 4250,
+              "y": 200
+            },
+            "data": {
+              "action": "VerifyPostPosted",
+              "label": "Xác thực bài viết đã đăng thành công",
+              "options": {},
+              "successNode": "n_pause_posted",
+              "failNode": "n_press_home"
+            }
+          },
+          {
+            "id": "n_pause_posted",
+            "type": "custom",
+            "position": {
+              "x": 4460,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ đăng xong 6s",
+              "options": {
+                "timePause": "6"
+              },
+              "successNode": "n_press_home"
+            }
+          },
+          {
+            "id": "n_press_home",
+            "type": "custom",
+            "position": {
+              "x": 4670,
+              "y": 200
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về màn hình Home",
+              "successNode": "n_pause_exit"
+            }
+          },
+          {
+            "id": "n_pause_exit",
+            "type": "custom",
+            "position": {
+              "x": 4880,
+              "y": 200
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ thoát 2s",
+              "options": {
+                "timePause": "2"
+              },
+              "successNode": "n_stop_threads"
+            }
+          },
+          {
+            "id": "n_stop_threads",
+            "type": "custom",
+            "position": {
+              "x": 5090,
+              "y": 200
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Threads an toàn",
+              "options": {
+                "packageName": "com.instagram.barcelona"
+              },
+              "successNode": "n_finish"
+            }
+          },
+          {
+            "id": "n_finish",
+            "type": "custom",
+            "position": {
+              "x": 5300,
+              "y": 200
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành đăng bài"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_n_start_n_wake",
+            "source": "n_start",
+            "target": "n_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_wake_n_pause_wake",
+            "source": "n_wake",
+            "target": "n_pause_wake",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_wake_n_ai_generate_post",
+            "source": "n_pause_wake",
+            "target": "n_ai_generate_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_ai_generate_post_n_prepare_meme",
+            "source": "n_ai_generate_post",
+            "target": "n_prepare_meme",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_prepare_meme_n_pause_after_import",
+            "source": "n_prepare_meme",
+            "target": "n_pause_after_import",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_after_import_n_open_threads",
+            "source": "n_pause_after_import",
+            "target": "n_open_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_open_threads_n_pause_load",
+            "source": "n_open_threads",
+            "target": "n_pause_load",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_load_n_recovery_1",
+            "source": "n_pause_load",
+            "target": "n_recovery_1",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_recovery_1_n_ensure_feed",
+            "source": "n_recovery_1",
+            "target": "n_ensure_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_ensure_feed_n_pause_feed",
+            "source": "n_ensure_feed",
+            "target": "n_pause_feed",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_feed_n_tap_create",
+            "source": "n_pause_feed",
+            "target": "n_tap_create",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_tap_create_n_pause_composer",
+            "source": "n_tap_create",
+            "target": "n_pause_composer",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_composer_n_attach_meme",
+            "source": "n_pause_composer",
+            "target": "n_attach_meme",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_attach_meme_n_pause_after_attach",
+            "source": "n_attach_meme",
+            "target": "n_pause_after_attach",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_after_attach_n_focus_input",
+            "source": "n_pause_after_attach",
+            "target": "n_focus_input",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_focus_input_n_pause_focus",
+            "source": "n_focus_input",
+            "target": "n_pause_focus",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_focus_n_type_post",
+            "source": "n_pause_focus",
+            "target": "n_type_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_type_post_n_pause_review",
+            "source": "n_type_post",
+            "target": "n_pause_review",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_review_n_tap_post",
+            "source": "n_pause_review",
+            "target": "n_tap_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_tap_post_n_verify_post",
+            "source": "n_tap_post",
+            "target": "n_verify_post",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_verify_post_n_pause_posted",
+            "source": "n_verify_post",
+            "target": "n_pause_posted",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_fail_n_verify_post_n_press_home",
+            "source": "n_verify_post",
+            "target": "n_press_home",
+            "sourceHandle": "failNode"
+          },
+          {
+            "id": "e_n_pause_posted_n_press_home",
+            "source": "n_pause_posted",
+            "target": "n_press_home",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_press_home_n_pause_exit",
+            "source": "n_press_home",
+            "target": "n_pause_exit",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_pause_exit_n_stop_threads",
+            "source": "n_pause_exit",
+            "target": "n_stop_threads",
+            "sourceHandle": "successNode"
+          },
+          {
+            "id": "e_n_stop_threads_n_finish",
+            "source": "n_stop_threads",
+            "target": "n_finish",
+            "sourceHandle": "successNode"
+          }
+        ]
+      },
+      "platform": "threads",
+      "category": "post",
+      "categoryLabel": "Đăng Bài"
+    },
+    {
+      "id": "flow_fb_reels_surf",
+      "name": "Facebook: Lướt Reels Tự Động (Video Ngắn 3 - 5 Phút)",
+      "platform": "facebook",
+      "category": "video",
+      "categoryLabel": "Reels & Video",
+      "description": "Lướt xem 14 video Reels (3 - 5 phút), dwell time tự nhiên 8-16s mỗi clip, thả tim ngẫu nhiên ~30% tăng trust tài khoản.",
+      "version": "1.0.0",
+      "nodeCount": 17,
+      "edgeCount": 17,
+      "flow": {
+        "nodes": [
+          {
+            "id": "r_start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 130
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_pause_wake",
+            "type": "default",
+            "label": "Chờ 2s",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "r_pause_load",
+            "type": "default",
+            "label": "Chờ nạp Facebook 5s",
+            "position": {
+              "x": 300,
+              "y": 370
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Facebook 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_recovery",
+            "type": "default",
+            "label": "Bảo vệ màn hình",
+            "position": {
+              "x": 300,
+              "y": 450
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_tap_reels",
+            "type": "default",
+            "label": "Chuyển tab Reels",
+            "position": {
+              "x": 300,
+              "y": 530
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Chuyển tab Reels",
+              "options": {
+                "selector": "//*[@content-desc=\"Nút Reels\" or contains(@content-desc, \"Reels\")]",
+                "touchX": 360,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "r_pause_reels",
+            "type": "default",
+            "label": "Chờ nạp Reels 3s",
+            "position": {
+              "x": 300,
+              "y": 610
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Reels 3s",
+              "options": {
+                "timePause": "3",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_loop",
+            "type": "default",
+            "label": "Vòng lặp xem Reels (14 video)",
+            "position": {
+              "x": 300,
+              "y": 690
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp xem Reels (14 video)",
+              "options": {
+                "count": "14",
+                "loopId": "fb_reels_loop_14",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "r_watch_video",
+              "failNode": "r_pause_after_loop"
+            }
+          },
+          {
+            "id": "r_watch_video",
+            "type": "default",
+            "label": "Xem video 8 - 16 giây",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Xem video 8 - 16 giây",
+              "options": {
+                "minTime": "8",
+                "maxTime": "16",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_random_like",
+            "type": "default",
+            "label": "Thả tim ngẫu nhiên (~30%)",
+            "position": {
+              "x": 300,
+              "y": 850
+            },
+            "data": {
+              "action": "FbReelsInteract",
+              "label": "Thả tim ngẫu nhiên (~30%)",
+              "options": {
+                "likeRate": "0.30",
+                "touchX": 660,
+                "touchY": 920,
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_swipe_next",
+            "type": "default",
+            "label": "Vuốt xem video tiếp theo",
+            "position": {
+              "x": 300,
+              "y": 930
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Vuốt xem video tiếp theo",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "450",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_loop_recovery",
+            "type": "default",
+            "label": "Chống kẹt / Popup",
+            "position": {
+              "x": 300,
+              "y": 1010
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt / Popup",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_pause_after_loop",
+            "type": "default",
+            "label": "Chờ kết thúc 2s",
+            "position": {
+              "x": 550,
+              "y": 690
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ kết thúc 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_home",
+            "type": "default",
+            "label": "Về Home",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_stop_fb",
+            "type": "default",
+            "label": "Đóng Facebook an toàn",
+            "position": {
+              "x": 550,
+              "y": 850
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook an toàn",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "r_finish",
+            "type": "output",
+            "label": "Hoàn thành",
+            "position": {
+              "x": 550,
+              "y": 930
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_r_start_r_wake_successNode",
+            "source": "r_start",
+            "target": "r_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_wake_r_pause_wake_successNode",
+            "source": "r_wake",
+            "target": "r_pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_pause_wake_r_open_fb_successNode",
+            "source": "r_pause_wake",
+            "target": "r_open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_open_fb_r_pause_load_successNode",
+            "source": "r_open_fb",
+            "target": "r_pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_pause_load_r_recovery_successNode",
+            "source": "r_pause_load",
+            "target": "r_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_recovery_r_tap_reels_successNode",
+            "source": "r_recovery",
+            "target": "r_tap_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_tap_reels_r_pause_reels_successNode",
+            "source": "r_tap_reels",
+            "target": "r_pause_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_pause_reels_r_loop_successNode",
+            "source": "r_pause_reels",
+            "target": "r_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_loop_r_watch_video_successNode",
+            "source": "r_loop",
+            "target": "r_watch_video",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_watch_video_r_random_like_successNode",
+            "source": "r_watch_video",
+            "target": "r_random_like",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_random_like_r_swipe_next_successNode",
+            "source": "r_random_like",
+            "target": "r_swipe_next",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_swipe_next_r_loop_recovery_successNode",
+            "source": "r_swipe_next",
+            "target": "r_loop_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_loop_recovery_r_loop_successNode",
+            "source": "r_loop_recovery",
+            "target": "r_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_loop_r_pause_after_loop_failNode",
+            "source": "r_loop",
+            "target": "r_pause_after_loop",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_pause_after_loop_r_home_successNode",
+            "source": "r_pause_after_loop",
+            "target": "r_home",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_home_r_stop_fb_successNode",
+            "source": "r_home",
+            "target": "r_stop_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_r_stop_fb_r_finish_successNode",
+            "source": "r_stop_fb",
+            "target": "r_finish",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-11-02T17:30:15.174Z",
+      "updatedAt": "2026-11-02T17:30:15.175Z"
+    },
+    {
+      "id": "flow_fb_watch_video",
+      "name": "Facebook: Xem Video Watch (Video Dài 5 - 7 Phút)",
+      "platform": "facebook",
+      "category": "video",
+      "categoryLabel": "Reels & Video",
+      "description": "Vào tab Facebook Watch, xem 7 video dài (25 - 50s/video, tổng 5 - 7 phút), cuộn tự nhiên tăng watch-time và uy tín nick.",
+      "version": "1.0.0",
+      "nodeCount": 16,
+      "edgeCount": 16,
+      "flow": {
+        "nodes": [
+          {
+            "id": "w_start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 130
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_pause_wake",
+            "type": "default",
+            "label": "Chờ 2s",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "w_pause_load",
+            "type": "default",
+            "label": "Chờ nạp Facebook 5s",
+            "position": {
+              "x": 300,
+              "y": 370
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Facebook 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_recovery",
+            "type": "default",
+            "label": "Bảo vệ màn hình",
+            "position": {
+              "x": 300,
+              "y": 450
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_tap_watch",
+            "type": "default",
+            "label": "Chuyển tab Xem Video Watch",
+            "position": {
+              "x": 300,
+              "y": 530
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Chuyển tab Xem Video Watch",
+              "options": {
+                "selector": "//*[contains(@content-desc, \"Xem video\") or contains(@content-desc, \"Watch\")]",
+                "touchX": 250,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "w_pause_watch",
+            "type": "default",
+            "label": "Chờ nạp Watch 4s",
+            "position": {
+              "x": 300,
+              "y": 610
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Watch 4s",
+              "options": {
+                "timePause": "4",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_loop",
+            "type": "default",
+            "label": "Vòng lặp xem video (7 lần)",
+            "position": {
+              "x": 300,
+              "y": 690
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp xem video (7 lần)",
+              "options": {
+                "count": "7",
+                "loopId": "fb_watch_loop_7",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "w_watch_time",
+              "failNode": "w_pause_after_loop"
+            }
+          },
+          {
+            "id": "w_watch_time",
+            "type": "default",
+            "label": "Xem video 25 - 50 giây",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Xem video 25 - 50 giây",
+              "options": {
+                "minTime": "25",
+                "maxTime": "50",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_swipe_next",
+            "type": "default",
+            "label": "Cuộn video tiếp theo",
+            "position": {
+              "x": 300,
+              "y": 850
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn video tiếp theo",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_loop_recovery",
+            "type": "default",
+            "label": "Chống kẹt / Popup",
+            "position": {
+              "x": 300,
+              "y": 930
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt / Popup",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_pause_after_loop",
+            "type": "default",
+            "label": "Chờ kết thúc 2s",
+            "position": {
+              "x": 550,
+              "y": 690
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ kết thúc 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_home",
+            "type": "default",
+            "label": "Về Home",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_stop_fb",
+            "type": "default",
+            "label": "Đóng Facebook an toàn",
+            "position": {
+              "x": 550,
+              "y": 850
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook an toàn",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "w_finish",
+            "type": "output",
+            "label": "Hoàn thành",
+            "position": {
+              "x": 550,
+              "y": 930
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_w_start_w_wake_successNode",
+            "source": "w_start",
+            "target": "w_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_wake_w_pause_wake_successNode",
+            "source": "w_wake",
+            "target": "w_pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_pause_wake_w_open_fb_successNode",
+            "source": "w_pause_wake",
+            "target": "w_open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_open_fb_w_pause_load_successNode",
+            "source": "w_open_fb",
+            "target": "w_pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_pause_load_w_recovery_successNode",
+            "source": "w_pause_load",
+            "target": "w_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_recovery_w_tap_watch_successNode",
+            "source": "w_recovery",
+            "target": "w_tap_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_tap_watch_w_pause_watch_successNode",
+            "source": "w_tap_watch",
+            "target": "w_pause_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_pause_watch_w_loop_successNode",
+            "source": "w_pause_watch",
+            "target": "w_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_loop_w_watch_time_successNode",
+            "source": "w_loop",
+            "target": "w_watch_time",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_watch_time_w_swipe_next_successNode",
+            "source": "w_watch_time",
+            "target": "w_swipe_next",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_swipe_next_w_loop_recovery_successNode",
+            "source": "w_swipe_next",
+            "target": "w_loop_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_loop_recovery_w_loop_successNode",
+            "source": "w_loop_recovery",
+            "target": "w_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_loop_w_pause_after_loop_failNode",
+            "source": "w_loop",
+            "target": "w_pause_after_loop",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_pause_after_loop_w_home_successNode",
+            "source": "w_pause_after_loop",
+            "target": "w_home",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_home_w_stop_fb_successNode",
+            "source": "w_home",
+            "target": "w_stop_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_w_stop_fb_w_finish_successNode",
+            "source": "w_stop_fb",
+            "target": "w_finish",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-11-02T17:30:15.175Z",
+      "updatedAt": "2026-11-02T17:30:15.175Z"
+    },
+    {
+      "id": "flow_fb_friend_suggestions",
+      "name": "Facebook: Kết Bạn Theo Gợi Ý (Chống Spam 2 - 3 Phút)",
+      "platform": "facebook",
+      "category": "friends",
+      "categoryLabel": "Kết Bạn",
+      "description": "Gửi 4 lời mời kết bạn từ đề xuất bạn chung, giãn cách an toàn 18 - 28s giữa các lần bấm để tránh bị Facebook chặn tính năng.",
+      "version": "1.0.0",
+      "nodeCount": 17,
+      "edgeCount": 17,
+      "flow": {
+        "nodes": [
+          {
+            "id": "fs_start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 130
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_pause_wake",
+            "type": "default",
+            "label": "Chờ 2s",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "fs_pause_load",
+            "type": "default",
+            "label": "Chờ nạp Facebook 5s",
+            "position": {
+              "x": 300,
+              "y": 370
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Facebook 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_recovery",
+            "type": "default",
+            "label": "Bảo vệ màn hình",
+            "position": {
+              "x": 300,
+              "y": 450
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_tap_friends",
+            "type": "default",
+            "label": "Vào mục Bạn bè",
+            "position": {
+              "x": 300,
+              "y": 530
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Vào mục Bạn bè",
+              "options": {
+                "selector": "//*[contains(@content-desc, \"Bạn bè\") or contains(@content-desc, \"Friends\")]",
+                "touchX": 180,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "fs_pause_friends",
+            "type": "default",
+            "label": "Chờ nạp danh sách 4s",
+            "position": {
+              "x": 300,
+              "y": 610
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp danh sách 4s",
+              "options": {
+                "timePause": "4",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_loop",
+            "type": "default",
+            "label": "Vòng lặp gửi kết bạn (4 lần)",
+            "position": {
+              "x": 300,
+              "y": 690
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp gửi kết bạn (4 lần)",
+              "options": {
+                "count": "4",
+                "loopId": "fb_fs_loop_4",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "fs_click_add",
+              "failNode": "fs_pause_end"
+            }
+          },
+          {
+            "id": "fs_click_add",
+            "type": "default",
+            "label": "Bấm \"Thêm bạn bè\"",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm \"Thêm bạn bè\"",
+              "options": {
+                "selector": "//*[contains(@text, \"Thêm bạn bè\") or contains(@content-desc, \"Thêm bạn bè\")]",
+                "touchX": 580,
+                "touchY": 340,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "fs_delay_add",
+            "type": "default",
+            "label": "Dừng nghỉ an toàn (18 - 28s)",
+            "position": {
+              "x": 300,
+              "y": 850
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng nghỉ an toàn (18 - 28s)",
+              "options": {
+                "minTime": "18",
+                "maxTime": "28",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_swipe_scroll",
+            "type": "default",
+            "label": "Cuộn tìm người tiếp theo",
+            "position": {
+              "x": 300,
+              "y": 930
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn tìm người tiếp theo",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "600",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_loop_recovery",
+            "type": "default",
+            "label": "Chống kẹt / Popup",
+            "position": {
+              "x": 300,
+              "y": 1010
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt / Popup",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_pause_end",
+            "type": "default",
+            "label": "Chờ kết thúc 2s",
+            "position": {
+              "x": 550,
+              "y": 690
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ kết thúc 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_home",
+            "type": "default",
+            "label": "Về Home",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_stop_fb",
+            "type": "default",
+            "label": "Đóng Facebook an toàn",
+            "position": {
+              "x": 550,
+              "y": 850
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook an toàn",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "fs_finish",
+            "type": "output",
+            "label": "Hoàn thành",
+            "position": {
+              "x": 550,
+              "y": 930
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_fs_start_fs_wake_successNode",
+            "source": "fs_start",
+            "target": "fs_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_wake_fs_pause_wake_successNode",
+            "source": "fs_wake",
+            "target": "fs_pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_pause_wake_fs_open_fb_successNode",
+            "source": "fs_pause_wake",
+            "target": "fs_open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_open_fb_fs_pause_load_successNode",
+            "source": "fs_open_fb",
+            "target": "fs_pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_pause_load_fs_recovery_successNode",
+            "source": "fs_pause_load",
+            "target": "fs_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_recovery_fs_tap_friends_successNode",
+            "source": "fs_recovery",
+            "target": "fs_tap_friends",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_tap_friends_fs_pause_friends_successNode",
+            "source": "fs_tap_friends",
+            "target": "fs_pause_friends",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_pause_friends_fs_loop_successNode",
+            "source": "fs_pause_friends",
+            "target": "fs_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_loop_fs_click_add_successNode",
+            "source": "fs_loop",
+            "target": "fs_click_add",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_click_add_fs_delay_add_successNode",
+            "source": "fs_click_add",
+            "target": "fs_delay_add",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_delay_add_fs_swipe_scroll_successNode",
+            "source": "fs_delay_add",
+            "target": "fs_swipe_scroll",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_swipe_scroll_fs_loop_recovery_successNode",
+            "source": "fs_swipe_scroll",
+            "target": "fs_loop_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_loop_recovery_fs_loop_successNode",
+            "source": "fs_loop_recovery",
+            "target": "fs_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_loop_fs_pause_end_failNode",
+            "source": "fs_loop",
+            "target": "fs_pause_end",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_pause_end_fs_home_successNode",
+            "source": "fs_pause_end",
+            "target": "fs_home",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_home_fs_stop_fb_successNode",
+            "source": "fs_home",
+            "target": "fs_stop_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_fs_stop_fb_fs_finish_successNode",
+            "source": "fs_stop_fb",
+            "target": "fs_finish",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-11-02T17:30:15.175Z",
+      "updatedAt": "2026-11-02T17:30:15.175Z"
+    },
+    {
+      "id": "flow_fb_confirm_friends",
+      "name": "Facebook: Xác Nhận Kết Bạn (Tự Động 2 - 3 Phút)",
+      "platform": "facebook",
+      "category": "friends",
+      "categoryLabel": "Kết Bạn",
+      "description": "Xác nhận 5 lời mời kết bạn gửi đến, giãn cách tự nhiên 12 - 20s giữa mỗi lần xác nhận, cuộn xem danh sách an toàn.",
+      "version": "1.0.0",
+      "nodeCount": 17,
+      "edgeCount": 17,
+      "flow": {
+        "nodes": [
+          {
+            "id": "cf_start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 130
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_pause_wake",
+            "type": "default",
+            "label": "Chờ 2s",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "cf_pause_load",
+            "type": "default",
+            "label": "Chờ nạp Facebook 5s",
+            "position": {
+              "x": 300,
+              "y": 370
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Facebook 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_recovery",
+            "type": "default",
+            "label": "Bảo vệ màn hình",
+            "position": {
+              "x": 300,
+              "y": 450
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_tap_friends",
+            "type": "default",
+            "label": "Vào mục Bạn bè",
+            "position": {
+              "x": 300,
+              "y": 530
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Vào mục Bạn bè",
+              "options": {
+                "selector": "//*[contains(@content-desc, \"Bạn bè\") or contains(@content-desc, \"Friends\")]",
+                "touchX": 180,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "cf_pause_friends",
+            "type": "default",
+            "label": "Chờ nạp lời mời 4s",
+            "position": {
+              "x": 300,
+              "y": 610
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp lời mời 4s",
+              "options": {
+                "timePause": "4",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_loop",
+            "type": "default",
+            "label": "Vòng lặp xác nhận (5 lần)",
+            "position": {
+              "x": 300,
+              "y": 690
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Vòng lặp xác nhận (5 lần)",
+              "options": {
+                "count": "5",
+                "loopId": "fb_cf_loop_5",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "cf_click_confirm",
+              "failNode": "cf_pause_end"
+            }
+          },
+          {
+            "id": "cf_click_confirm",
+            "type": "default",
+            "label": "Bấm \"Xác nhận\"",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "Touch",
+              "label": "Bấm \"Xác nhận\"",
+              "options": {
+                "selector": "//*[contains(@text, \"Xác nhận\") or @text=\"Xác nhận\"]",
+                "touchX": 580,
+                "touchY": 340,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "cf_delay",
+            "type": "default",
+            "label": "Dừng nghỉ tự nhiên (12 - 20s)",
+            "position": {
+              "x": 300,
+              "y": 850
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng nghỉ tự nhiên (12 - 20s)",
+              "options": {
+                "minTime": "12",
+                "maxTime": "20",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_swipe_scroll",
+            "type": "default",
+            "label": "Cuộn xuống xem lời mời tiếp",
+            "position": {
+              "x": 300,
+              "y": 930
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn xuống xem lời mời tiếp",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "550",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_loop_recovery",
+            "type": "default",
+            "label": "Chống kẹt / Popup",
+            "position": {
+              "x": 300,
+              "y": 1010
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt / Popup",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_pause_end",
+            "type": "default",
+            "label": "Chờ kết thúc 2s",
+            "position": {
+              "x": 550,
+              "y": 690
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ kết thúc 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_home",
+            "type": "default",
+            "label": "Về Home",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_stop_fb",
+            "type": "default",
+            "label": "Đóng Facebook an toàn",
+            "position": {
+              "x": 550,
+              "y": 850
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook an toàn",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "cf_finish",
+            "type": "output",
+            "label": "Hoàn thành",
+            "position": {
+              "x": 550,
+              "y": 930
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_cf_start_cf_wake_successNode",
+            "source": "cf_start",
+            "target": "cf_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_wake_cf_pause_wake_successNode",
+            "source": "cf_wake",
+            "target": "cf_pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_pause_wake_cf_open_fb_successNode",
+            "source": "cf_pause_wake",
+            "target": "cf_open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_open_fb_cf_pause_load_successNode",
+            "source": "cf_open_fb",
+            "target": "cf_pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_pause_load_cf_recovery_successNode",
+            "source": "cf_pause_load",
+            "target": "cf_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_recovery_cf_tap_friends_successNode",
+            "source": "cf_recovery",
+            "target": "cf_tap_friends",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_tap_friends_cf_pause_friends_successNode",
+            "source": "cf_tap_friends",
+            "target": "cf_pause_friends",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_pause_friends_cf_loop_successNode",
+            "source": "cf_pause_friends",
+            "target": "cf_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_loop_cf_click_confirm_successNode",
+            "source": "cf_loop",
+            "target": "cf_click_confirm",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_click_confirm_cf_delay_successNode",
+            "source": "cf_click_confirm",
+            "target": "cf_delay",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_delay_cf_swipe_scroll_successNode",
+            "source": "cf_delay",
+            "target": "cf_swipe_scroll",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_swipe_scroll_cf_loop_recovery_successNode",
+            "source": "cf_swipe_scroll",
+            "target": "cf_loop_recovery",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_loop_recovery_cf_loop_successNode",
+            "source": "cf_loop_recovery",
+            "target": "cf_loop",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_loop_cf_pause_end_failNode",
+            "source": "cf_loop",
+            "target": "cf_pause_end",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_pause_end_cf_home_successNode",
+            "source": "cf_pause_end",
+            "target": "cf_home",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_home_cf_stop_fb_successNode",
+            "source": "cf_home",
+            "target": "cf_stop_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_cf_stop_fb_cf_finish_successNode",
+            "source": "cf_stop_fb",
+            "target": "cf_finish",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-11-02T17:30:15.175Z",
+      "updatedAt": "2026-11-02T17:30:15.175Z"
+    },
+    {
+      "id": "flow_fb_daily_care",
+      "name": "Facebook: Nuôi Nick Tổng Hợp Hằng Ngày (Feed + Reels + Watch 6 - 8 Phút)",
+      "platform": "facebook",
+      "category": "nuoi_nick",
+      "categoryLabel": "Nuôi Tổng Hợp",
+      "description": "Kịch bản nuôi tự động trọn gói 6 - 8 phút: P1 (Lướt Feed 8 lần) -> P2 (Xem 6 video Reels) -> P3 (Xem 3 video Watch dài).",
+      "version": "1.0.0",
+      "nodeCount": 28,
+      "edgeCount": 30,
+      "flow": {
+        "nodes": [
+          {
+            "id": "dc_start",
+            "type": "input",
+            "label": "Bắt đầu",
+            "position": {
+              "x": 300,
+              "y": 50
+            },
+            "data": {
+              "action": "Start",
+              "label": "Bắt đầu",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_wake",
+            "type": "default",
+            "label": "Bật màn hình",
+            "position": {
+              "x": 300,
+              "y": 130
+            },
+            "data": {
+              "action": "Wake",
+              "label": "Bật màn hình",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_pause_wake",
+            "type": "default",
+            "label": "Chờ 2s",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_open_fb",
+            "type": "default",
+            "label": "Mở Facebook",
+            "position": {
+              "x": 300,
+              "y": 290
+            },
+            "data": {
+              "action": "StartApp",
+              "label": "Mở Facebook",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "1"
+              }
+            }
+          },
+          {
+            "id": "dc_pause_load",
+            "type": "default",
+            "label": "Chờ nạp Facebook 5s",
+            "position": {
+              "x": 300,
+              "y": 370
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Facebook 5s",
+              "options": {
+                "timePause": "5",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_recovery_1",
+            "type": "default",
+            "label": "Bảo vệ màn hình",
+            "position": {
+              "x": 300,
+              "y": 450
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Bảo vệ màn hình",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_loop_feed",
+            "type": "default",
+            "label": "P1: Lướt Bảng tin (8 lần)",
+            "position": {
+              "x": 300,
+              "y": 530
+            },
+            "data": {
+              "action": "Loop",
+              "label": "P1: Lướt Bảng tin (8 lần)",
+              "options": {
+                "count": "8",
+                "loopId": "dc_feed_loop_8",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "dc_feed_swipe",
+              "failNode": "dc_tap_reels"
+            }
+          },
+          {
+            "id": "dc_feed_swipe",
+            "type": "default",
+            "label": "Cuộn đọc bài viết",
+            "position": {
+              "x": 300,
+              "y": 610
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn đọc bài viết",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_feed_read",
+            "type": "default",
+            "label": "Dừng đọc 5 - 10 giây",
+            "position": {
+              "x": 300,
+              "y": 690
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Dừng đọc 5 - 10 giây",
+              "options": {
+                "minTime": "5",
+                "maxTime": "10",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_feed_like",
+            "type": "default",
+            "label": "Thả cảm xúc ngẫu nhiên (25%)",
+            "position": {
+              "x": 300,
+              "y": 770
+            },
+            "data": {
+              "action": "FbFeedInteract",
+              "label": "Thả cảm xúc ngẫu nhiên (25%)",
+              "options": {
+                "likeRate": "0.25",
+                "touchX": 135,
+                "touchY": 650,
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_feed_rec",
+            "type": "default",
+            "label": "Chống kẹt Bảng tin",
+            "position": {
+              "x": 300,
+              "y": 850
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt Bảng tin",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_tap_reels",
+            "type": "default",
+            "label": "P2: Chuyển tab Reels",
+            "position": {
+              "x": 550,
+              "y": 530
+            },
+            "data": {
+              "action": "Touch",
+              "label": "P2: Chuyển tab Reels",
+              "options": {
+                "selector": "//*[@content-desc=\"Nút Reels\" or contains(@content-desc, \"Reels\")]",
+                "touchX": 360,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "dc_pause_reels",
+            "type": "default",
+            "label": "Chờ nạp Reels 3s",
+            "position": {
+              "x": 550,
+              "y": 610
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Reels 3s",
+              "options": {
+                "timePause": "3",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_loop_reels",
+            "type": "default",
+            "label": "Xem 6 video Reels",
+            "position": {
+              "x": 550,
+              "y": 690
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Xem 6 video Reels",
+              "options": {
+                "count": "6",
+                "loopId": "dc_reels_loop_6",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "dc_watch_reels",
+              "failNode": "dc_tap_watch"
+            }
+          },
+          {
+            "id": "dc_watch_reels",
+            "type": "default",
+            "label": "Xem video 10 - 18 giây",
+            "position": {
+              "x": 550,
+              "y": 770
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Xem video 10 - 18 giây",
+              "options": {
+                "minTime": "10",
+                "maxTime": "18",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_reels_like",
+            "type": "default",
+            "label": "Thả tim Reels ngẫu nhiên (30%)",
+            "position": {
+              "x": 550,
+              "y": 850
+            },
+            "data": {
+              "action": "FbReelsInteract",
+              "label": "Thả tim Reels ngẫu nhiên (30%)",
+              "options": {
+                "likeRate": "0.30",
+                "touchX": 660,
+                "touchY": 920,
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_swipe_reels",
+            "type": "default",
+            "label": "Vuốt video tiếp theo",
+            "position": {
+              "x": 550,
+              "y": 930
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Vuốt video tiếp theo",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "450",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_reels_rec",
+            "type": "default",
+            "label": "Chống kẹt Reels",
+            "position": {
+              "x": 550,
+              "y": 1010
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt Reels",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_tap_watch",
+            "type": "default",
+            "label": "P3: Chuyển tab Watch",
+            "position": {
+              "x": 800,
+              "y": 690
+            },
+            "data": {
+              "action": "Touch",
+              "label": "P3: Chuyển tab Watch",
+              "options": {
+                "selector": "//*[contains(@content-desc, \"Xem video\") or contains(@content-desc, \"Watch\")]",
+                "touchX": 250,
+                "touchY": 140,
+                "nodeSleep": "0.8"
+              }
+            }
+          },
+          {
+            "id": "dc_pause_watch",
+            "type": "default",
+            "label": "Chờ nạp Watch 3s",
+            "position": {
+              "x": 800,
+              "y": 770
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Chờ nạp Watch 3s",
+              "options": {
+                "timePause": "3",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_loop_watch",
+            "type": "default",
+            "label": "Xem 3 video Watch dài",
+            "position": {
+              "x": 800,
+              "y": 850
+            },
+            "data": {
+              "action": "Loop",
+              "label": "Xem 3 video Watch dài",
+              "options": {
+                "count": "3",
+                "loopId": "dc_watch_loop_3",
+                "nodeSleep": "0.5"
+              },
+              "successNode": "dc_watch_video",
+              "failNode": "dc_pause_end"
+            }
+          },
+          {
+            "id": "dc_watch_video",
+            "type": "default",
+            "label": "Xem video 30 - 55 giây",
+            "position": {
+              "x": 800,
+              "y": 930
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Xem video 30 - 55 giây",
+              "options": {
+                "minTime": "30",
+                "maxTime": "55",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_swipe_watch",
+            "type": "default",
+            "label": "Cuộn video tiếp theo",
+            "position": {
+              "x": 800,
+              "y": 1010
+            },
+            "data": {
+              "action": "Swipe",
+              "label": "Cuộn video tiếp theo",
+              "options": {
+                "swipeDirection": "up",
+                "swipeTime": "750",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_watch_rec",
+            "type": "default",
+            "label": "Chống kẹt Watch",
+            "position": {
+              "x": 800,
+              "y": 1090
+            },
+            "data": {
+              "action": "AutoRecovery",
+              "label": "Chống kẹt Watch",
+              "options": {
+                "targetPackage": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_pause_end",
+            "type": "default",
+            "label": "Hoàn thành phiên nuôi 2s",
+            "position": {
+              "x": 1050,
+              "y": 850
+            },
+            "data": {
+              "action": "Pause",
+              "label": "Hoàn thành phiên nuôi 2s",
+              "options": {
+                "timePause": "2",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_home",
+            "type": "default",
+            "label": "Về Home",
+            "position": {
+              "x": 1050,
+              "y": 930
+            },
+            "data": {
+              "action": "PressHome",
+              "label": "Về Home",
+              "options": {
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_stop_fb",
+            "type": "default",
+            "label": "Đóng Facebook an toàn",
+            "position": {
+              "x": 1050,
+              "y": 1010
+            },
+            "data": {
+              "action": "StopApp",
+              "label": "Đóng Facebook an toàn",
+              "options": {
+                "packageName": "com.facebook.katana",
+                "nodeSleep": "0.5"
+              }
+            }
+          },
+          {
+            "id": "dc_finish",
+            "type": "output",
+            "label": "Hoàn thành",
+            "position": {
+              "x": 1050,
+              "y": 1090
+            },
+            "data": {
+              "action": "Stop",
+              "label": "Hoàn thành",
+              "options": {}
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_dc_start_dc_wake_successNode",
+            "source": "dc_start",
+            "target": "dc_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_wake_dc_pause_wake_successNode",
+            "source": "dc_wake",
+            "target": "dc_pause_wake",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_pause_wake_dc_open_fb_successNode",
+            "source": "dc_pause_wake",
+            "target": "dc_open_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_open_fb_dc_pause_load_successNode",
+            "source": "dc_open_fb",
+            "target": "dc_pause_load",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_pause_load_dc_recovery_1_successNode",
+            "source": "dc_pause_load",
+            "target": "dc_recovery_1",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_recovery_1_dc_loop_feed_successNode",
+            "source": "dc_recovery_1",
+            "target": "dc_loop_feed",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_feed_dc_feed_swipe_successNode",
+            "source": "dc_loop_feed",
+            "target": "dc_feed_swipe",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_feed_swipe_dc_feed_read_successNode",
+            "source": "dc_feed_swipe",
+            "target": "dc_feed_read",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_feed_read_dc_feed_like_successNode",
+            "source": "dc_feed_read",
+            "target": "dc_feed_like",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_feed_like_dc_feed_rec_successNode",
+            "source": "dc_feed_like",
+            "target": "dc_feed_rec",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_feed_rec_dc_loop_feed_successNode",
+            "source": "dc_feed_rec",
+            "target": "dc_loop_feed",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_feed_dc_tap_reels_failNode",
+            "source": "dc_loop_feed",
+            "target": "dc_tap_reels",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_tap_reels_dc_pause_reels_successNode",
+            "source": "dc_tap_reels",
+            "target": "dc_pause_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_pause_reels_dc_loop_reels_successNode",
+            "source": "dc_pause_reels",
+            "target": "dc_loop_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_reels_dc_watch_reels_successNode",
+            "source": "dc_loop_reels",
+            "target": "dc_watch_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_watch_reels_dc_reels_like_successNode",
+            "source": "dc_watch_reels",
+            "target": "dc_reels_like",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_reels_like_dc_swipe_reels_successNode",
+            "source": "dc_reels_like",
+            "target": "dc_swipe_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_swipe_reels_dc_reels_rec_successNode",
+            "source": "dc_swipe_reels",
+            "target": "dc_reels_rec",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_reels_rec_dc_loop_reels_successNode",
+            "source": "dc_reels_rec",
+            "target": "dc_loop_reels",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_reels_dc_tap_watch_failNode",
+            "source": "dc_loop_reels",
+            "target": "dc_tap_watch",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_tap_watch_dc_pause_watch_successNode",
+            "source": "dc_tap_watch",
+            "target": "dc_pause_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_pause_watch_dc_loop_watch_successNode",
+            "source": "dc_pause_watch",
+            "target": "dc_loop_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_watch_dc_watch_video_successNode",
+            "source": "dc_loop_watch",
+            "target": "dc_watch_video",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_watch_video_dc_swipe_watch_successNode",
+            "source": "dc_watch_video",
+            "target": "dc_swipe_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_swipe_watch_dc_watch_rec_successNode",
+            "source": "dc_swipe_watch",
+            "target": "dc_watch_rec",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_watch_rec_dc_loop_watch_successNode",
+            "source": "dc_watch_rec",
+            "target": "dc_loop_watch",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_loop_watch_dc_pause_end_failNode",
+            "source": "dc_loop_watch",
+            "target": "dc_pause_end",
+            "sourceHandle": "failNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#ff6b6b",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_pause_end_dc_home_successNode",
+            "source": "dc_pause_end",
+            "target": "dc_home",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_home_dc_stop_fb_successNode",
+            "source": "dc_home",
+            "target": "dc_stop_fb",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          },
+          {
+            "id": "e_dc_stop_fb_dc_finish_successNode",
+            "source": "dc_stop_fb",
+            "target": "dc_finish",
+            "sourceHandle": "successNode",
+            "targetHandle": "successNode",
+            "type": "custom",
+            "style": {
+              "stroke": "#62fcaf",
+              "strokeWidth": 2
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-11-02T17:30:15.175Z",
+      "updatedAt": "2026-11-02T17:30:15.175Z"
+    }
+  ],
+  "runs": [],
+  "schedules": [
+    {
+      "id": "sched_sample_facebook",
+      "name": "Nuôi tương tác Facebook buổi sáng",
+      "enabled": false,
+      "flowId": "flow_nuoi_fb_smart_loop",
+      "flowName": "Facebook: Nuôi Nick Thông Minh (Lướt Feed 3 - 5 Phút)",
+      "targetMode": "all",
+      "targetSerials": [],
+      "type": "daily",
+      "time": "08:00",
+      "intervalMinutes": 60,
+      "daysOfWeek": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        0
+      ],
+      "wakeScreen": true,
+      "rotateAccounts": true,
+      "lastRun": null,
+      "status": "idle",
+      "createdAt": "2026-11-04T17:44:40.612Z"
+    },
+    {
+      "id": "sched_sample_threads",
+      "name": "Nuôi tương tác Threads tự nhiên",
+      "enabled": false,
+      "flowId": "flow_threads_nuoi_nick_tu_nhien",
+      "flowName": "Threads: Nuôi Tương Tác Tự Nhiên (Lướt Feed 3 - 5 Phút)",
+      "targetMode": "all",
+      "targetSerials": [],
+      "type": "daily",
+      "time": "14:30",
+      "intervalMinutes": 120,
+      "daysOfWeek": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        0
+      ],
+      "wakeScreen": true,
+      "rotateAccounts": true,
+      "lastRun": null,
+      "status": "idle",
+      "createdAt": "2026-11-04T17:44:40.612Z"
+    }
+  ],
+  "boxSettings": {
+    "selectedPort": "COM73",
+    "fanSpeed": "HIGH",
+    "mode": "USB",
+    "channels": [
+      {
+        "id": 1,
+        "name": "Slot 01",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 2,
+        "name": "Slot 02",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 3,
+        "name": "Slot 03",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 4,
+        "name": "Slot 04",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 5,
+        "name": "Slot 05",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 6,
+        "name": "Slot 06",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 7,
+        "name": "Slot 07",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 8,
+        "name": "Slot 08",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 9,
+        "name": "Slot 09",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 10,
+        "name": "Slot 10",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 11,
+        "name": "Slot 11",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 12,
+        "name": "Slot 12",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 13,
+        "name": "Slot 13",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 14,
+        "name": "Slot 14",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 15,
+        "name": "Slot 15",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 16,
+        "name": "Slot 16",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 17,
+        "name": "Slot 17",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 18,
+        "name": "Slot 18",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 19,
+        "name": "Slot 19",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      },
+      {
+        "id": 20,
+        "name": "Slot 20",
+        "power": true,
+        "mode": "USB",
+        "status": "Active"
+      }
+    ]
+  },
+  "settings": {
+    "streamQuality": "Medium",
+    "streamFps": 15,
+    "autoWakeDevices": true,
+    "groupMasterDevice": "GAGAA68HPVCEJFJV",
+    "selectedSlaves": []
+  }
+}
